@@ -52,11 +52,12 @@ public class HomeController {
 
     @PostMapping("add")
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
-                                    Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Integer> skills) {
+                                    Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Skill> skills) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
             return "add";
         }
+
         Optional<Employer> employerOptional = employerRepository.findById(employerId);
         if (employerOptional.isPresent()) {
             Employer employer = employerOptional.get();
@@ -66,15 +67,15 @@ public class HomeController {
             return "add";
         }
 
-        Optional<Skill> skillOptional = skillRepository.findById(employerId);
-        if (skillOptional.isPresent()) {
-            List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
-            newJob.setSkills(skillObjs);
-        } else {
-            model.addAttribute("errorMessage", "Employer not found for ID: " + employerId);
-            return "add";
-        }
-
+//        Optional<Skill> skillOptional = skillRepository.findById(employerId);
+//        if (skillOptional.isPresent()) {
+//            List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+//            newJob.setSkills(skillObjs);
+//        } else {
+//            model.addAttribute("errorMessage", "Employer not found for ID: " + employerId);
+//            return "add";
+//        }
+        newJob.setSkills(skills);
         jobRepository.save(newJob);
 
         return "redirect:";
@@ -90,7 +91,6 @@ public class HomeController {
         } else {
             model.addAttribute("errorMessage", "Job not found for ID: " + jobId);
         }
-
 
 
         return "view";

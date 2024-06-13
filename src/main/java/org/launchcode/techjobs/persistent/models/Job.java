@@ -5,19 +5,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 public class Job extends AbstractEntity {
-
     @ManyToOne
-    @JoinColumn(name = "employer_id")
     private Employer employer;
 
-    @ManyToMany(mappedBy = "jobs")
+    @ManyToMany
+    @JoinColumn (name="skills")
     private List<Skill> skills = new ArrayList<>();
 
     // Initialize the id and value fields.
@@ -47,5 +46,4 @@ public class Job extends AbstractEntity {
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
-
 }
